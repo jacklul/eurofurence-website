@@ -21,6 +21,7 @@
 		"pagesDirectory": "pages/",
 		"robots": "index, follow, noodp",
 		"rootPage": "home",
+        "notFoundPage": "404",
 		"titlePrefix": "EF{number}: ",
 		"titleSuffix": ""
 	},
