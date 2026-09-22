@@ -46,6 +46,13 @@ class EFWebCore {
 			((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) ? 
 			'https://' : 'http://';
 
+        // rewrite for build-in PHP server
+        if (php_sapi_name() === 'cli-server') {
+            $tmp = explode('/', $_SERVER['PHP_SELF']);
+            $_SERVER['PHP_SELF'] = implode('/', array_slice($tmp, 0, 2));
+            $_GET['p'] = implode('/', array_slice($tmp, 2));
+        }
+
 		// construct base url
 		$this->config->base = str_replace(
 			'{number}',
