@@ -1,9 +1,21 @@
 <?php
 # Eurofurence Partner Links Update script
 # to be called periodically, e.g. with
-# 0 9 * * *     curl https://www.eurofurence.org/EF27/updatepartners.php > /dev/null
+# 0 9 * * *     curl https://www.eurofurence.org/EF27/updatepartners.php?secret=asdf1234 > /dev/null
+# 0 9 * * *     php -d max_execution_time=3600 /srv/www/eurofurence/website/www/src/updatepartners.php > /dev/null
 
-echo '<pre>';
+require_once __DIR__ . '/cron-secret.php';
+
+define('IS_CLI', php_sapi_name() === 'cli');
+
+if (!IS_CLI && !is_cron_secret_ok()) {
+    http_response_code(403);
+    exit;
+}
+
+chdir(__DIR__); // change to the current directory
+
+if (!IS_CLI) echo '<pre>';
 
 $data_file = '../config/partners.json';
 
@@ -113,9 +125,10 @@ foreach ($data['conventions'] as $key => $con)
     }
 }
 
-echo '</pre>';
+if (!IS_CLI) echo '</pre>';
+echo "\n";
 
-file_put_contents($data_file, json_encode($new_data, JSON_PRETTY_PRINT));
+file_put_contents($data_file, json_encode($new_data, JSON_PRETTY_PRINT), LOCK_EX);
 
 function boolstr($bool)
 {
