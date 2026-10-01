@@ -7,7 +7,7 @@
  */
 
 # configurable telegram config file path
-define('TELEGRAM_CONFIG_PATH', 'telegram.config.php');
+define('TELEGRAM_CONFIG_PATH', __DIR__ . '/../../telegram.config.php');
 
 # create file if it doesn't exist
 if (!file_exists(TELEGRAM_CONFIG_PATH)) {
